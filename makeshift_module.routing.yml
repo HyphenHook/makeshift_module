@@ -1,0 +1,15 @@
+makeshift_module.batch_process_form:
+  path: '/batch-process'
+  defaults:
+    _form: '\Drupal\makeshift_module\Form\BatchProcessForm'
+    _title: 'Batch Process Form'
+  requirements:
+    _permission: 'access content'
+
+makeshift_module.batch_process_tag_form:
+  path: '/batch-process2'
+  defaults:
+    _form: '\Drupal\makeshift_module\Form\BatchProcessTagForm'
+    _title: 'Batch Process Tag Form'
+  requirements:
+    _permission: 'access content'

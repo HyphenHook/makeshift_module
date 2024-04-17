@@ -1,0 +1,4 @@
+name: Makeshift Module
+description: A module that only runs the .install file.
+core_version_requirement: ^10
+type: module

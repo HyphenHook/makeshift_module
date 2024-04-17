@@ -1,0 +1,11 @@
+<?php
+
+function makeshift_module_install () {
+  $config = \Drupal::configFactory()->getEditable('recogito_integration.settings');
+  $config->set('recogito_integration.text_color', $config->get('recogito_integration.text_colour'));
+  $config->set('recogito_integration.background_color', $config->get('recogito_integration.background'));
+  $config->set('recogito_integration.underline_stroke', $config->get('recogito_integration.underline_thickness'));
+  $config->set('recogito_integration.underline_color', $config->get('recogito_integration.underline_colour'));
+  $config->set('recogito_integration.vocabulary_name', $config->get('recogito_integration.annotation_vocab_name'));
+  $config->save();
+}
