@@ -1,0 +1,74 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.annotation_textualbody.field_annotation_comment
+    - field.field.paragraph.annotation_textualbody.field_annotation_creator
+    - field.field.paragraph.annotation_textualbody.field_annotation_date_created
+    - field.field.paragraph.annotation_textualbody.field_annotation_last_modified
+    - field.field.paragraph.annotation_textualbody.field_annotation_purpose
+    - field.field.paragraph.annotation_textualbody.field_annotation_tag_reference
+    - paragraphs.paragraphs_type.annotation_textualbody
+  enforced:
+    module:
+      - recogito_integration
+id: paragraph.annotation_textualbody.default
+targetEntityType: paragraph
+bundle: annotation_textualbody
+mode: default
+content:
+  field_annotation_comment:
+    type: string_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_annotation_creator:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_annotation_date_created:
+    type: string_textfield
+    weight: 4
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_annotation_last_modified:
+    type: string_textfield
+    weight: 5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_annotation_purpose:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_annotation_tag_reference:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

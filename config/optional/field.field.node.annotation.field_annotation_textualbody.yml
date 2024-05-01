@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_annotation_textualbody
+    - node.type.annotation
+    - paragraphs.paragraphs_type.annotation_textualbody
+  module:
+    - entity_reference_revisions
+  enforced:
+    module:
+      - recogito_integration
+id: node.annotation.field_annotation_textualbody
+field_name: field_annotation_textualbody
+entity_type: node
+bundle: annotation
+label: Textualbodies
+description: 'The textual bodies associated with this annotation.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      annotation_textualbody: annotation_textualbody
+    negate: 0
+    target_bundles_drag_drop:
+      annotation_textualbody:
+        weight: 2
+        enabled: true
+field_type: entity_reference_revisions

@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_annotation_last_modified
+    - paragraphs.paragraphs_type.annotation_textualbody
+  enforced:
+    module:
+      - recogito_integration
+id: paragraph.annotation_textualbody.field_annotation_last_modified
+field_name: field_annotation_last_modified
+entity_type: paragraph
+bundle: annotation_textualbody
+label: 'Last Modified'
+description: 'The date this textual body was last modified.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

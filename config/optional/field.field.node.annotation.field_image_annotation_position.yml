@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_image_annotation_position
+    - node.type.annotation
+  enforced:
+    module:
+      - recogito_integration
+id: node.annotation.field_image_annotation_position
+field_name: field_image_annotation_position
+entity_type: node
+bundle: annotation
+label: 'Image Annotation Position'
+description: 'The position of the image annotation box.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

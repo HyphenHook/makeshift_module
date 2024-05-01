@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_text_annotation_end
+    - node.type.annotation
+  enforced:
+    module:
+      - recogito_integration
+id: node.annotation.field_text_annotation_end
+field_name: field_text_annotation_end
+entity_type: node
+bundle: annotation
+label: 'Text End Position'
+description: 'The end position of the text annotation.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

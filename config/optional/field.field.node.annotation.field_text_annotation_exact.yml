@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_text_annotation_exact
+    - node.type.annotation
+  enforced:
+    module:
+      - recogito_integration
+id: node.annotation.field_text_annotation_exact
+field_name: field_text_annotation_exact
+entity_type: node
+bundle: annotation
+label: 'Text Exact Value'
+description: 'The exact textual content targeted by this text annotation.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

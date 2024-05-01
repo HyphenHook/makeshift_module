@@ -13,3 +13,11 @@ makeshift_module.batch_process_tag_form:
     _title: 'Batch Process Tag Form'
   requirements:
     _permission: 'access content'
+
+makeshift_module.batch_process_remodel_form:
+  path: '/batch-process3'
+  defaults:
+    _form: '\Drupal\makeshift_module\Form\BatchProcessRemodelForm'
+    _title: 'Batch Process Remodel Form'
+  requirements:
+    _permission: 'access content'

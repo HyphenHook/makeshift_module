@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_annotation_comment
+    - paragraphs.paragraphs_type.annotation_textualbody
+  enforced:
+    module:
+      - recogito_integration
+id: paragraph.annotation_textualbody.field_annotation_comment
+field_name: field_annotation_comment
+entity_type: paragraph
+bundle: annotation_textualbody
+label: 'Commenting Content'
+description: 'The content that is associated with this commenting textual body.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

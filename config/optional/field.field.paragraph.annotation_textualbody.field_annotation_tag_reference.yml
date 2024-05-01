@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_annotation_tag_reference
+    - paragraphs.paragraphs_type.annotation_textualbody
+  enforced:
+    module:
+      - recogito_integration
+id: paragraph.annotation_textualbody.field_annotation_tag_reference
+field_name: field_annotation_tag_reference
+entity_type: paragraph
+bundle: annotation_textualbody
+label: 'Tag Reference'
+description: 'The entity reference to the taxonomy term this textual body tag is referring to.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

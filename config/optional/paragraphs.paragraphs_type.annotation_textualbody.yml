@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies: 
+  enforced:
+    module:
+      - recogito_integration
+id: annotation_textualbody
+label: 'Annotation TextualBody'
+icon_uuid: null
+icon_default: null
+description: 'Textualbody for the Recogito Integration Module.'
+behavior_plugins: {  }
