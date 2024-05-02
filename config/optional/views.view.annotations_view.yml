@@ -1592,7 +1592,7 @@ display:
             operator: name_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: name
+            identifier: field_annotation_tag_name
             required: false
             remember: false
             multiple: false
