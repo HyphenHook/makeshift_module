@@ -1,8 +1,6 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - node.type.annotation
   module:
     - node
     - user

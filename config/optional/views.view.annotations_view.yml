@@ -4,11 +4,18 @@ dependencies:
   config:
     - field.storage.node.field_annotation_node_reference
     - field.storage.node.field_annotation_target_field
+    - field.storage.node.field_annotation_textualbody
     - field.storage.node.field_annotation_type
     - node.type.annotation
   module:
+    - entity_reference_revisions
     - node
+    - paragraphs
+    - taxonomy
     - user
+  enforced:
+    module:
+      - recogito_integration
 id: annotations_view
 label: 'Annotations View'
 module: views
@@ -23,19 +30,17 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'All Existing Annotations'
+      title: 'Node Annotations'
       fields:
-        title:
-          id: title
-          table: node_field_data
-          field: title
+        field_annotation_textualbody:
+          id: field_annotation_textualbody
+          table: node__field_annotation_textualbody
+          field: field_annotation_textualbody
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: title
           plugin_id: field
-          label: 'Annotation ID'
+          label: ''
           exclude: false
           alter:
             alter_text: false
@@ -76,11 +81,10 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: true
-          group_column: value
+          click_sort_column: ''
+          type: entity_reference_revisions_entity_view
+          settings: {  }
+          group_column: entity_id
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -128,18 +132,7 @@ display:
       cache:
         type: tag
         options: {  }
-      empty:
-        area_text_custom:
-          id: area_text_custom
-          table: views
-          field: area_text_custom
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: text_custom
-          empty: true
-          content: 'No content available.'
-          tokenize: false
+      empty: {  }
       sorts:
         changed:
           id: changed
@@ -157,7 +150,40 @@ display:
             field_identifier: ''
           exposed: false
           granularity: second
-      arguments: {  }
+      arguments:
+        field_annotation_node_reference_target_id:
+          id: field_annotation_node_reference_target_id
+          table: node__field_annotation_node_reference
+          field: field_annotation_node_reference_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: numeric
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: node
+          default_argument_options: {  }
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: false
+          not: false
       filters:
         status:
           id: status
@@ -259,115 +285,21 @@ display:
                 title: Image
                 operator: '='
                 value: Image
-        title:
-          id: title
-          table: node_field_data
-          field: title
-          relationship: field_annotation_node_reference
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: title
-          plugin_id: string
-          operator: contains
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: title_op
-            label: 'Annotations For'
-            description: ''
-            use_operator: false
-            operator: title_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: title
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              content_editor: '0'
-              administrator: '0'
-              fedoraadmin: '0'
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
       filter_groups:
         operator: AND
         groups:
           1: AND
       style:
-        type: table
+        type: default
         options:
           grouping: {  }
           row_class: ''
           default_row_class: true
-          columns:
-            title: title
-            type: type
-            field_annotation_id: field_annotation_id
-            field_annotation_node_reference: field_annotation_node_reference
-            nothing: nothing
-          default: '-1'
-          info:
-            title:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            type:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_annotation_id:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            field_annotation_node_reference:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: true
-              responsive: ''
-            nothing:
-              align: ''
-              separator: ''
-              empty_column: true
-              responsive: ''
-          override: true
-          sticky: false
-          summary: ''
-          empty_table: false
-          caption: ''
-          description: ''
       row:
         type: fields
         options:
           default_field_elements: true
-          inline:
-            field_annotation_node_reference: field_annotation_node_reference
-            field_annotation_id: field_annotation_id
+          inline: {  }
           separator: ''
           hide_empty: false
       query:
@@ -378,12 +310,7 @@ display:
           distinct: false
           replica: false
           query_tags: {  }
-      relationships:
-        field_annotation_node_reference:
-          id: field_annotation_node_reference
-          table: node__field_annotation_node_reference
-          field: field_annotation_node_reference
-          plugin_id: standard
+      relationships: {  }
       group_by: true
       header: {  }
       footer: {  }
@@ -397,13 +324,15 @@ display:
         - url.query_args
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.node.field_annotation_textualbody'
   annotation_content:
     id: annotation_content
     display_title: 'Annotation Content'
     display_plugin: page
     position: 2
     display_options:
+      title: Annotations
       fields:
         title:
           id: title
@@ -478,7 +407,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: field
-          label: 'Annotation type'
+          label: 'Annotation Type'
           exclude: false
           alter:
             alter_text: false
@@ -902,12 +831,312 @@ display:
           action_title: Action
           include_exclude: exclude
           selected_actions: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: 'No annotations found.'
+          tokenize: false
       arguments: {  }
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          operator: in
+          value:
+            annotation: annotation
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_annotation_type_value:
+          id: field_annotation_type_value
+          table: node__field_annotation_type
+          field: field_annotation_type_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: string
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_annotation_type_value_op
+            label: 'Annotation Type (field_annotation_type)'
+            description: null
+            use_operator: false
+            operator: field_annotation_type_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_annotation_type_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: null
+          is_grouped: true
+          group_info:
+            label: 'Annotation Type'
+            description: ''
+            identifier: field_annotation_type_value
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: Text
+                operator: '='
+                value: Text
+              2:
+                title: Image
+                operator: '='
+                value: Image
+        field_annotation_node_reference_target_id:
+          id: field_annotation_node_reference_target_id
+          table: node__field_annotation_node_reference
+          field: field_annotation_node_reference_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: numeric
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_annotation_node_reference_target_id_op
+            label: 'Node ID'
+            description: ''
+            use_operator: false
+            operator: field_annotation_node_reference_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_annotation_node_reference_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              content_editor: '0'
+              administrator: '0'
+              fedoraadmin: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: field_annotation_node_reference
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: string
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: title_op
+            label: 'Annotations For'
+            description: ''
+            use_operator: false
+            operator: title_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: title
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              content_editor: '0'
+              administrator: '0'
+              fedoraadmin: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          columns:
+            title: title
+            field_annotation_type: field_annotation_type
+            field_annotation_target_field: field_annotation_target_field
+            created: created
+            field_annotation_textualbody: field_annotation_textualbody
+            field_annotation_node_reference: field_annotation_node_reference
+            operations: operations
+            node_bulk_form: node_bulk_form
+          default: '-1'
+          info:
+            title:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_annotation_type:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_annotation_target_field:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            created:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_annotation_textualbody:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_annotation_node_reference:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            operations:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            node_bulk_form:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          override: true
+          sticky: false
+          summary: ''
+          empty_table: false
+          caption: ''
+          description: ''
+      row:
+        type: fields
+        options:
+          default_field_elements: true
+          inline:
+            field_annotation_node_reference: field_annotation_node_reference
+            field_annotation_id: field_annotation_id
+          separator: ''
+          hide_empty: false
       defaults:
+        empty: false
+        title: false
         group_by: false
+        style: false
+        row: false
         relationships: false
         fields: false
         arguments: false
+        filters: false
+        filter_groups: false
       relationships:
         field_annotation_node_reference:
           id: field_annotation_node_reference
@@ -960,3 +1189,489 @@ display:
         - 'config:field.storage.node.field_annotation_node_reference'
         - 'config:field.storage.node.field_annotation_target_field'
         - 'config:field.storage.node.field_annotation_type'
+  annotations_block:
+    id: annotations_block
+    display_title: 'Annotations Block'
+    display_plugin: block
+    position: 2
+    display_options:
+      fields:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: ID
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_annotation_textualbody:
+          id: field_annotation_textualbody
+          table: node__field_annotation_textualbody
+          field: field_annotation_textualbody
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_revisions_entity_view
+          settings:
+            view_mode: default
+          group_column: entity_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ''
+          field_api_classes: false
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 50
+          total_pages: null
+          id: 0
+          tags:
+            next: 'Next ›'
+            previous: '‹ Previous'
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+      arguments:
+        field_annotation_node_reference_target_id:
+          id: field_annotation_node_reference_target_id
+          table: node__field_annotation_node_reference
+          field: field_annotation_node_reference_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: numeric
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: node
+          default_argument_options: {  }
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: false
+          not: false
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          operator: in
+          value:
+            annotation: annotation
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_annotation_type_value:
+          id: field_annotation_type_value
+          table: node__field_annotation_type
+          field: field_annotation_type_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: string
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_annotation_type_value_op
+            label: 'Annotation Type (field_annotation_type)'
+            description: null
+            use_operator: false
+            operator: field_annotation_type_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_annotation_type_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: null
+          is_grouped: true
+          group_info:
+            label: 'Annotation Type'
+            description: ''
+            identifier: field_annotation_type_value
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: Text
+                operator: '='
+                value: Text
+              2:
+                title: Image
+                operator: '='
+                value: Image
+        field_annotation_purpose_value:
+          id: field_annotation_purpose_value
+          table: paragraph__field_annotation_purpose
+          field: field_annotation_purpose_value
+          relationship: field_annotation_textualbody
+          group_type: group
+          admin_label: ''
+          plugin_id: string
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_annotation_purpose_value_op
+            label: 'Purpose (field_annotation_purpose)'
+            description: null
+            use_operator: false
+            operator: field_annotation_purpose_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_annotation_purpose_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: null
+          is_grouped: true
+          group_info:
+            label: 'Textualbody Purpose'
+            description: ''
+            identifier: field_annotation_purpose_value
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: Commenting
+                operator: '='
+                value: commenting
+              2:
+                title: Tagging
+                operator: '='
+                value: tagging
+        field_annotation_comment_value:
+          id: field_annotation_comment_value
+          table: paragraph__field_annotation_comment
+          field: field_annotation_comment_value
+          relationship: field_annotation_textualbody
+          group_type: group
+          admin_label: ''
+          plugin_id: string
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_annotation_comment_value_op
+            label: 'Comment Contains'
+            description: ''
+            use_operator: false
+            operator: field_annotation_comment_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_annotation_comment_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              content_editor: '0'
+              administrator: '0'
+              fedoraadmin: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        name:
+          id: name
+          table: taxonomy_term_field_data
+          field: name
+          relationship: field_annotation_tag_reference
+          group_type: group
+          admin_label: ''
+          entity_type: taxonomy_term
+          entity_field: name
+          plugin_id: string
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: name_op
+            label: 'Tag Name'
+            description: ''
+            use_operator: false
+            operator: name_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: name
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              content_editor: '0'
+              administrator: '0'
+              fedoraadmin: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        use_ajax: false
+        pager: false
+        group_by: false
+        relationships: false
+        fields: false
+        arguments: false
+        filters: false
+        filter_groups: false
+      relationships:
+        field_annotation_textualbody:
+          id: field_annotation_textualbody
+          table: node__field_annotation_textualbody
+          field: field_annotation_textualbody
+          relationship: none
+          group_type: group
+          admin_label: 'field_annotation_textualbody: Paragraph'
+          plugin_id: standard
+          required: false
+        field_annotation_tag_reference:
+          id: field_annotation_tag_reference
+          table: paragraph__field_annotation_tag_reference
+          field: field_annotation_tag_reference
+          relationship: field_annotation_textualbody
+          group_type: group
+          admin_label: 'field_annotation_tag_reference: Taxonomy term'
+          plugin_id: standard
+          required: false
+      use_ajax: true
+      group_by: true
+      display_description: ''
+      display_extenders:
+        matomo:
+          enabled: false
+          keyword_gets: ''
+          keyword_behavior: first
+          keyword_concat_separator: ' '
+          category_behavior: none
+          category_gets: ''
+          category_concat_separator: ' '
+          category_fallback: ''
+          category_facets: {  }
+          category_facets_concat_separator: ', '
+      block_description: 'Annotations Block'
+      block_hide_empty: true
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_annotation_textualbody'
