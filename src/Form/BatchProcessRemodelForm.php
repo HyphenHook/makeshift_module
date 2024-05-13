@@ -49,7 +49,7 @@ class BatchProcessRemodelForm extends FormBase {
 
     // Array of field machine names to delete
     $fields_to_delete = ['field_annotation_image_source', 'field_annotation_image_value', 'field_annotation_page', 'field_annotation_target_element', 'field_annotation_target_end',
-    'field_annotation_target_exact', 'field_annotation_target_start', 'field_annotation_textualbodies']; // Replace with your field machine names
+    'field_annotation_target_exact', 'field_annotation_target_start', 'field_annotation_textualbodies']; 
 
     foreach ($fields_to_delete as $field_name) {
       // Load the field config entity
