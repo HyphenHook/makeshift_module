@@ -71,7 +71,7 @@ class BatchProcessRemodelForm extends FormBase {
     ->accessCheck(FALSE)
     ->execute();
 
-    $chunks = array_chunk($nids, 2);
+    $chunks = array_chunk($nids, 1);
     $operations = [];
 
     foreach ($chunks as $chunk) {
